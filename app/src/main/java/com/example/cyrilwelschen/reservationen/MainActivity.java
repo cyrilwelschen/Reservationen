@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements ScrollViewListener {
 
     private RelativeLayout mLayout;
@@ -37,15 +39,8 @@ public class MainActivity extends AppCompatActivity implements ScrollViewListene
         standardGrid(datesRowLayout, dateIndex);
         //standardGrid(mLayout, eventIndex);
         roomGrid(roomsColumnLayout, roomIndex);
-        int height_all = 90;
-        createReservationView(1, 110, height_all, 200*3-20, "H1");
-        createReservationView(2, 110, height_all, 200*1-20, "H2");
-        createReservationView(2, 310, height_all, 200*1-20, "H2.2");
-        createReservationView(3, 310, height_all, 200*9-20, "H3");
-        createReservationView(4, 510, height_all, 200*3-20, "H4");
-        createReservationView(5, 310, height_all, 200*4-20, "H5");
-        createReservationView(6, 1210, height_all, 200*6-20, "H6");
         //sv.scrollTo(600, 0);
+        createReservationView();
 
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
@@ -82,7 +77,22 @@ public class MainActivity extends AppCompatActivity implements ScrollViewListene
         layout.addView(darkGrayView, counter - 1);
     }
 
-    private void createReservationView(int top, int left, int height, int width, String label) {
+    private void createReservationView() {
+        int height_all = 90;
+        DataRenderer dataTest = new DataRenderer();
+        String labelOne = dataTest.singleDataTest();
+        List<String> reservation = dataTest.singleReservationTest();
+        Reservation resTest = new Reservation("1", "2", "12.06.2018", "15.06.2018", "Cyril");
+        createSingleReservationView(1, 110, height_all, 200*3-20, labelOne);
+        createSingleReservationView(2, 110, height_all, 200-20, resTest.inString);
+        createSingleReservationView(2, 310, height_all, 200-20, Integer.toString(resTest.inDiff));
+        createSingleReservationView(3, 310, height_all, 200*9-20, "H3");
+        createSingleReservationView(4, 510, height_all, 200*3-20, "H4");
+        createSingleReservationView(5, 310, height_all, 200*4-20, "H5");
+        createSingleReservationView(6, 1210, height_all, 200*6-20, "H6");
+    }
+
+    private void createSingleReservationView(int top, int left, int height, int width, String label) {
         TextView mEventView = new TextView(MainActivity.this);
         RelativeLayout.LayoutParams lParam = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
