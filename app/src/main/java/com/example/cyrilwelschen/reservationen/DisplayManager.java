@@ -1,10 +1,5 @@
 package com.example.cyrilwelschen.reservationen;
 
-import android.content.Context;
-import android.graphics.Point;
-import android.view.Display;
-import android.view.WindowManager;
-
 /**
  * Created by cyril on 07.06.18.
  * Class to handle display of reservations: Gets screen resolution, day to pixel ration,
@@ -18,8 +13,8 @@ public class DisplayManager {
     private int DATES_IN_DISPLAY = 50;
     private int xScreenPixelNumber;
     private int yScreenPixelNumber;
-    private long dayToPixelRation;
-    private long roomToPixelRation;
+    private long dayToPixelRatio;
+    private long roomToPixelRatio;
 
     DisplayManager(int width, int height) {
         xScreenPixelNumber = width;
@@ -40,11 +35,11 @@ public class DisplayManager {
     }
 
     private void setDayToPixelRation(){
-        roomToPixelRation = DATES_IN_DISPLAY/yScreenPixelNumber;
+        roomToPixelRatio = DATES_IN_DISPLAY/yScreenPixelNumber;
     }
 
     private void setRoomToPixelRation(){
-        dayToPixelRation = GUESSED_ROOMS_IN_DISPLAY/xScreenPixelNumber;
+        dayToPixelRatio = GUESSED_ROOMS_IN_DISPLAY/xScreenPixelNumber;
     }
 
     void displayReservations(){

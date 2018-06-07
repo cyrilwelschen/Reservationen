@@ -19,28 +19,22 @@ public class MainActivity extends AppCompatActivity implements ScrollViewListene
     final int ROOM_GRID_WIDTH = 100;
     private RelativeLayout mLayout;
     private int eventIndex;
-    private ObservableScrollView scrollView1;
-    private ObservableScrollView scrollView2;
+    private ObservableScrollView dateScroll;
+    private ObservableScrollView resHorizontalScroll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         mLayout = findViewById(R.id.relative_layout);
-        eventIndex = mLayout.getChildCount();
         RelativeLayout roomsColumnLayout = findViewById(R.id.rooms_column);
-        int roomIndex = roomsColumnLayout.getChildCount();
         RelativeLayout datesRowLayout = findViewById(R.id.dates_row);
-        int dateIndex = datesRowLayout.getChildCount();
-        scrollView1 = findViewById(R.id.dates_scroll_view);
-        scrollView1.setScrollViewListener(this);
-        scrollView2 = findViewById(R.id.horizontal_scroll_view);
-        scrollView2.setScrollViewListener(this);
-        standardGrid(datesRowLayout, dateIndex);
-        //standardGrid(mLayout, eventIndex);
-        roomGrid(roomsColumnLayout, roomIndex);
-        //sv.scrollTo(600, 0);
-        createReservationView();
+
+        dateScroll = findViewById(R.id.dates_scroll_view);
+        dateScroll.setScrollViewListener(this);
+        resHorizontalScroll = findViewById(R.id.horizontal_scroll_view);
+        resHorizontalScroll.setScrollViewListener(this);
 
         // window size in pixel
         Display display = getWindowManager().getDefaultDisplay();
@@ -48,17 +42,28 @@ public class MainActivity extends AppCompatActivity implements ScrollViewListene
         display.getSize(size);
         int width = size.x;
         int height = size.y;
+
+        // Setup DisplayManager
         DisplayManager displayManager = new DisplayManager(width, height);
         displayManager.deviceSetup();
         displayManager.displayReservations();
+
+        eventIndex = mLayout.getChildCount();
+        int roomIndex = roomsColumnLayout.getChildCount();
+        int dateIndex = datesRowLayout.getChildCount();
 
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-                scrollView2.scrollTo(800, 0);
+                resHorizontalScroll.scrollTo(800, 0);
             }
         }, 500);
+
+        standardGrid(datesRowLayout, dateIndex);
+        roomGrid(roomsColumnLayout, roomIndex);
+        createReservationView();
+
     }
 
     private void standardGrid(RelativeLayout layout, int layout_counter){
@@ -83,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements ScrollViewListene
         darkGrayView.setText(label);
         darkGrayView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         darkGrayView.setBackgroundColor(Color.parseColor(color));
-        //mLayout.addView(darkGrayView, eventIndex - 1);
         layout.addView(darkGrayView, counter - 1);
     }
 
@@ -144,10 +148,10 @@ public class MainActivity extends AppCompatActivity implements ScrollViewListene
     }
 
     public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldX, int oldY) {
-        if(scrollView == scrollView1) {
-            scrollView2.scrollTo(x, y);
-        } else if(scrollView == scrollView2) {
-            scrollView1.scrollTo(x, y);
+        if(scrollView == dateScroll) {
+            resHorizontalScroll.scrollTo(x, y);
+        } else if(scrollView == resHorizontalScroll) {
+            dateScroll.scrollTo(x, y);
         }
     }
 
