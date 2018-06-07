@@ -1,9 +1,11 @@
 package com.example.cyrilwelschen.reservationen;
 
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -39,6 +41,16 @@ public class MainActivity extends AppCompatActivity implements ScrollViewListene
         roomGrid(roomsColumnLayout, roomIndex);
         //sv.scrollTo(600, 0);
         createReservationView();
+
+        // window size in pixel
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        DisplayManager displayManager = new DisplayManager(width, height);
+        displayManager.deviceSetup();
+        displayManager.displayReservations();
 
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
@@ -77,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements ScrollViewListene
 
     private void createReservationView() {
         int height_all = 90;
-        DataRenderer dataTest = new DataRenderer();
+        ReservationRenderer dataTest = new ReservationRenderer();
         String labelOne = dataTest.singleDataTest();
         List<String> reservation = dataTest.singleReservationTest();
         Reservation resTest = new Reservation("1", "2", "12.06.2018", "15.06.2018", "Cyril");

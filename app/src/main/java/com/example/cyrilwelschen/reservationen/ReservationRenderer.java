@@ -8,13 +8,13 @@ import java.util.List;
  *
  */
 
-class DataRenderer {
+class ReservationRenderer {
 
-    String singleDataTest(){
+    String singleDataTest() {
         return "hello";
     }
 
-    List<String> singleReservationTest(){
+    List<String> singleReservationTest() {
         List<String> reservation = new ArrayList<>();
         reservation.add("1");
         reservation.add("302");
