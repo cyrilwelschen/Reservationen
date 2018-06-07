@@ -13,12 +13,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ScrollViewListener {
 
+    final int ROOM_GRID_HEIGHT = 90;
+    final int ROOM_GRID_WIDTH = 100;
     private RelativeLayout mLayout;
-    private RelativeLayout roomsColumnLayout;
-    private RelativeLayout datesRowLayout;
     private int eventIndex;
-    private int roomIndex;
-    private int dateIndex;
     private ObservableScrollView scrollView1;
     private ObservableScrollView scrollView2;
 
@@ -28,10 +26,10 @@ public class MainActivity extends AppCompatActivity implements ScrollViewListene
         setContentView(R.layout.activity_main);
         mLayout = findViewById(R.id.relative_layout);
         eventIndex = mLayout.getChildCount();
-        roomsColumnLayout = findViewById(R.id.rooms_column);
-        roomIndex = roomsColumnLayout.getChildCount();
-        datesRowLayout = findViewById(R.id.dates_row);
-        dateIndex = datesRowLayout.getChildCount();
+        RelativeLayout roomsColumnLayout = findViewById(R.id.rooms_column);
+        int roomIndex = roomsColumnLayout.getChildCount();
+        RelativeLayout datesRowLayout = findViewById(R.id.dates_row);
+        int dateIndex = datesRowLayout.getChildCount();
         scrollView1 = findViewById(R.id.dates_scroll_view);
         scrollView1.setScrollViewListener(this);
         scrollView2 = findViewById(R.id.horizontal_scroll_view);
@@ -86,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements ScrollViewListene
         createSingleReservationView(1, 110, height_all, 200*3-20, labelOne);
         createSingleReservationView(2, 110, height_all, 200-20, resTest.inString);
         createSingleReservationView(2, 310, height_all, 200-20, Integer.toString(resTest.inDiff));
-        createSingleReservationView(3, 310, height_all, 200*9-20, "H3");
+        createSingleReservationView(3, 310, height_all, 200*9-20, reservation.get(1));
         createSingleReservationView(4, 510, height_all, 200*3-20, "H4");
         createSingleReservationView(5, 310, height_all, 200*4-20, "H5");
         createSingleReservationView(6, 1210, height_all, 200*6-20, "H6");
@@ -112,16 +110,16 @@ public class MainActivity extends AppCompatActivity implements ScrollViewListene
     private void roomGrid(RelativeLayout layout, int layoutCounter){
         for (int i = 0; i<17; i++){
             int j = i+1;
-            createRoomView(layout, layoutCounter, i, 0, 90, 100, String.valueOf(300+j));
+            createRoomView(layout, layoutCounter, i, ROOM_GRID_HEIGHT, ROOM_GRID_WIDTH, String.valueOf(300+j));
         }
     }
 
-    private void createRoomView(RelativeLayout layout, int counter, int top, int left, int height, int width, String label) {
+    private void createRoomView(RelativeLayout layout, int counter, int top, int height, int width, String label) {
         TextView mEventView = new TextView(MainActivity.this);
         RelativeLayout.LayoutParams lParam = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         lParam.topMargin = top * 100;
-        lParam.leftMargin = left;
+        lParam.leftMargin = 0;
         mEventView.setLayoutParams(lParam);
         mEventView.setPadding(0, 0, 0, 0);
         mEventView.setHeight(height);
@@ -133,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements ScrollViewListene
         layout.addView(mEventView, counter - 1);
     }
 
-    public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
+    public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldX, int oldY) {
         if(scrollView == scrollView1) {
             scrollView2.scrollTo(x, y);
         } else if(scrollView == scrollView2) {

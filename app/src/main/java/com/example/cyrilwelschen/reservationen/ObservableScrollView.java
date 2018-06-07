@@ -25,10 +25,10 @@ public class ObservableScrollView extends HorizontalScrollView {
     }
 
     @Override
-    protected void onScrollChanged(int x, int y, int oldx, int oldy) {
-        super.onScrollChanged(x, y, oldx, oldy);
+    protected void onScrollChanged(int x, int y, int oldX, int oldY) {
+        super.onScrollChanged(x, y, oldX, oldY);
         if(scrollViewListener != null) {
-            scrollViewListener.onScrollChanged(this, x, y, oldx, oldy);
+            scrollViewListener.onScrollChanged(this, x, y, oldX, oldY);
         }
     }
 
