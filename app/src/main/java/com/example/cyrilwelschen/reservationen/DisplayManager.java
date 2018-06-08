@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -39,6 +40,13 @@ public class DisplayManager implements ScrollViewListener{
 
     private ReservationRenderer resRenderer;
 
+
+    /// Display constants
+    int TOTAL_NUMBER_OF_DAYS = 50;
+    int NUMBER_OF_DAYS_IN_PAST = 10;
+    int PIXELS_PER_DAY = 200;
+    double INTER_DAY_PIXEL_OFFSET_PERCENTAGE = 0.05;
+
     DisplayManager(int width, int height, Activity _activity, Context _context) {
         this.activity = _activity;
         context = _context;
@@ -66,7 +74,7 @@ public class DisplayManager implements ScrollViewListener{
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-                resHorizontalScroll.scrollTo(800, 0);
+                resHorizontalScroll.scrollTo(PIXELS_PER_DAY*(NUMBER_OF_DAYS_IN_PAST - 1), 0);
             }
         }, 500);
 
@@ -96,18 +104,34 @@ public class DisplayManager implements ScrollViewListener{
 
     void displayReservations(){
         List<Reservation> resToDisplay = resRenderer.renderReservationListInRange();
+        for (Reservation res : resToDisplay) {
+            createSingleReservationView(roomToIndex(res.roomNr),
+                    200*res.inDiff + 110 + PIXELS_PER_DAY*NUMBER_OF_DAYS_IN_PAST,
+                    90,
+                    200*(res.outDiff- res.inDiff)-20,
+                     res.guestName);
+        }
+    }
+
+    private int roomToIndex(int roomNumber) {
+        List<Integer> roomList = Arrays.asList(301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319);
+        return roomList.indexOf(roomNumber);
     }
 
     private void getReservations(){
     }
 
     private void standardGrid(RelativeLayout layout, int layout_counter){
-        for (int i = 0; i<15; i++) {
-            if (i%2 == 0) {
-                drawString(layout, layout_counter, 200 * i, "0"+i+".06", "#dcdcdc");
+        for (int i = 0; i<50; i++) {
+            String color;
+            if (i-NUMBER_OF_DAYS_IN_PAST == 0) {
+                color = "#ababab";
+            } else if (i%2 == 0) {
+                color = "#dcdcdc";
             } else {
-                drawString(layout, layout_counter, 200 * i, "0"+i+".06", "#ffffff");
+                color = "#ffffff";
             }
+            drawString(layout, layout_counter, 200 * i, Integer.toString(i-NUMBER_OF_DAYS_IN_PAST), color);
         }
     }
 
@@ -159,7 +183,7 @@ public class DisplayManager implements ScrollViewListener{
     }
 
     private void roomGrid(RelativeLayout layout, int layoutCounter){
-        for (int i = 0; i<17; i++){
+        for (int i = 0; i<21; i++){
             int j = i+1;
             createRoomView(layout, layoutCounter, i, ROOM_GRID_HEIGHT, ROOM_GRID_WIDTH, String.valueOf(300+j));
         }

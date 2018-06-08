@@ -25,13 +25,16 @@ class ReservationRenderer {
     }
 
     List<Reservation> renderReservationListInRange(){
-        Reservation res1 = new Reservation("1", "10", "305",
+        Reservation res1 = new Reservation("1", "10", "315",
                 "12.06.2018", "15.06.2018" ,"Sammy");
-        Reservation res2 = new Reservation("1", "10", "307",
-                "02.06.2018", "10.06.2018" ,"Cyril");
+        Reservation res3 = new Reservation("1", "10", "312",
+                "11.06.2018", "16.07.2018" ,"Elmi");
+        Reservation res2 = new Reservation("1", "10", "317",
+                "02.06.2018", "12.06.2018" ,"Cyril");
         List<Reservation> reservationListInRange = new ArrayList<>();
         reservationListInRange.add(res1);
         reservationListInRange.add(res2);
+        reservationListInRange.add(res3);
         return reservationListInRange;
     }
 
