@@ -64,8 +64,12 @@ public class Reservation {
             e.printStackTrace();
         }
         long diff = returnDate.getTime() - today.getTime();
+        int correctForPast = 0;
+        if (diff < 1) {
+            correctForPast = 1;
+        }
         long dateDiffLong = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-        return toIntExact(dateDiffLong);
+        return toIntExact(dateDiffLong - correctForPast);
     }
 
     private Date stringToDate(String checkIn){

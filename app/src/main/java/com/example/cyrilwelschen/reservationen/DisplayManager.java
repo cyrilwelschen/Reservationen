@@ -3,6 +3,9 @@ package com.example.cyrilwelschen.reservationen;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.Calendar;
+import android.net.ParseException;
 import android.os.Handler;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -10,7 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by cyril on 07.06.18.
@@ -106,9 +111,9 @@ public class DisplayManager implements ScrollViewListener{
         List<Reservation> resToDisplay = resRenderer.renderReservationListInRange();
         for (Reservation res : resToDisplay) {
             createSingleReservationView(roomToIndex(res.roomNr),
-                    200*res.inDiff + 110 + PIXELS_PER_DAY*NUMBER_OF_DAYS_IN_PAST,
+                    PIXELS_PER_DAY*res.inDiff + 110 + PIXELS_PER_DAY*(NUMBER_OF_DAYS_IN_PAST+1),
                     90,
-                    200*(res.outDiff- res.inDiff)-20,
+                    PIXELS_PER_DAY*(res.outDiff- res.inDiff)-20,
                      res.guestName);
         }
     }
@@ -122,7 +127,7 @@ public class DisplayManager implements ScrollViewListener{
     }
 
     private void standardGrid(RelativeLayout layout, int layout_counter){
-        for (int i = 0; i<50; i++) {
+        for (int i = 1; i<50; i++) {
             String color;
             if (i-NUMBER_OF_DAYS_IN_PAST == 0) {
                 color = "#ababab";
@@ -131,8 +136,15 @@ public class DisplayManager implements ScrollViewListener{
             } else {
                 color = "#ffffff";
             }
-            drawString(layout, layout_counter, 200 * i, Integer.toString(i-NUMBER_OF_DAYS_IN_PAST), color);
+            drawString(layout, layout_counter, 200 * i, intDiffToDateString(i-NUMBER_OF_DAYS_IN_PAST), color);
         }
+    }
+
+    private String intDiffToDateString(int intDayDiff){
+        Calendar todayCal = Calendar.getInstance();
+        todayCal.add(Calendar.DATE, intDayDiff);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM");
+        return sdf.format(todayCal);
     }
 
     private void drawString(RelativeLayout layout, int counter, int leftMargin, String label, String color){
@@ -156,8 +168,8 @@ public class DisplayManager implements ScrollViewListener{
         String labelOne = dataTest.singleDataTest();
         List<String> reservation = dataTest.singleReservationTest();
         Reservation resTest = new Reservation("1", "2", "303","12.06.2018", "15.06.2018", "Cyril");
-        createSingleReservationView(1, 110, height_all, 200*3-20, labelOne);
-        createSingleReservationView(2, 110, height_all, 200-20, resTest.inString);
+        //createSingleReservationView(1, 110, height_all, 200*3-20, labelOne);
+        //createSingleReservationView(2, 110, height_all, 200-20, resTest.inString);
         createSingleReservationView(2, 310, height_all, 200-20, Integer.toString(resTest.inDiff));
         createSingleReservationView(3, 310, height_all, 200*9-20, reservation.get(1));
         createSingleReservationView(4, 510, height_all, 200*3-20, "H4");

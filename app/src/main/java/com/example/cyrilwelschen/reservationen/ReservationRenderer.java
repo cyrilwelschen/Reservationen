@@ -28,13 +28,16 @@ class ReservationRenderer {
         Reservation res1 = new Reservation("1", "10", "315",
                 "12.06.2018", "15.06.2018" ,"Sammy");
         Reservation res3 = new Reservation("1", "10", "312",
-                "11.06.2018", "16.07.2018" ,"Elmi");
+                "11.06.2018", "16.06.2018" ,"Elmi");
         Reservation res2 = new Reservation("1", "10", "317",
-                "02.06.2018", "12.06.2018" ,"Cyril");
+                "06.06.2018", "12.06.2018" ,"Cyril");
+        Reservation res4 = new Reservation("1", "10", "313",
+                "08.06.2018", "11.06.2018" ,"Kinan");
         List<Reservation> reservationListInRange = new ArrayList<>();
         reservationListInRange.add(res1);
         reservationListInRange.add(res2);
         reservationListInRange.add(res3);
+        reservationListInRange.add(res4);
         return reservationListInRange;
     }
 
