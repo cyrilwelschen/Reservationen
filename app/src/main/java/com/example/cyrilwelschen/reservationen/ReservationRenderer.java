@@ -24,4 +24,15 @@ class ReservationRenderer {
         return reservation;
     }
 
+    List<Reservation> renderReservationListInRange(){
+        Reservation res1 = new Reservation("1", "10", "305",
+                "12.06.2018", "15.06.2018" ,"Sammy");
+        Reservation res2 = new Reservation("1", "10", "307",
+                "02.06.2018", "10.06.2018" ,"Cyril");
+        List<Reservation> reservationListInRange = new ArrayList<>();
+        reservationListInRange.add(res1);
+        reservationListInRange.add(res2);
+        return reservationListInRange;
+    }
+
 }

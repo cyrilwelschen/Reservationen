@@ -37,6 +37,8 @@ public class DisplayManager implements ScrollViewListener{
     private Context context;
     public Activity activity;
 
+    private ReservationRenderer resRenderer;
+
     DisplayManager(int width, int height, Activity _activity, Context _context) {
         this.activity = _activity;
         context = _context;
@@ -57,6 +59,8 @@ public class DisplayManager implements ScrollViewListener{
         eventIndex = mLayout.getChildCount();
         int roomIndex = roomsColumnLayout.getChildCount();
         int dateIndex = datesRowLayout.getChildCount();
+
+        resRenderer = new ReservationRenderer();
 
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
@@ -91,6 +95,7 @@ public class DisplayManager implements ScrollViewListener{
     }
 
     void displayReservations(){
+        List<Reservation> resToDisplay = resRenderer.renderReservationListInRange();
     }
 
     private void getReservations(){
@@ -126,7 +131,7 @@ public class DisplayManager implements ScrollViewListener{
         ReservationRenderer dataTest = new ReservationRenderer();
         String labelOne = dataTest.singleDataTest();
         List<String> reservation = dataTest.singleReservationTest();
-        Reservation resTest = new Reservation("1", "2", "12.06.2018", "15.06.2018", "Cyril");
+        Reservation resTest = new Reservation("1", "2", "303","12.06.2018", "15.06.2018", "Cyril");
         createSingleReservationView(1, 110, height_all, 200*3-20, labelOne);
         createSingleReservationView(2, 110, height_all, 200-20, resTest.inString);
         createSingleReservationView(2, 310, height_all, 200-20, Integer.toString(resTest.inDiff));
