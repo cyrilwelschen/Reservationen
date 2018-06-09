@@ -1,7 +1,11 @@
 package com.example.cyrilwelschen.reservationen;
 
+import android.database.sqlite.SQLiteDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.database.sqlite.SQLiteDatabase.openDatabase;
 
 /**
  * Created by cyril on 04.06.18.
@@ -9,6 +13,8 @@ import java.util.List;
  */
 
 class ReservationRenderer {
+
+    //SQLiteDatabase db = openDatabase();
 
     String singleDataTest() {
         return "hello";

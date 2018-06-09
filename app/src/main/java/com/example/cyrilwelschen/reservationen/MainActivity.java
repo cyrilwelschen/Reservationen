@@ -23,5 +23,7 @@ public class MainActivity extends AppCompatActivity {
         DisplayManager displayManager = new DisplayManager(width, height, this, MainActivity.this);
         displayManager.deviceSetup();
         displayManager.displayReservations();
+
+        DbDownloadManager dbManager = new DbDownloadManager(MainActivity.this, this);
     }
 }
