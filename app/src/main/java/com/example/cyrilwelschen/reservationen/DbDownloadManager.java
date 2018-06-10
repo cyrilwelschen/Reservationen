@@ -16,13 +16,14 @@ import android.support.v4.app.ActivityCompat;
 
 class DbDownloadManager {
 
-    private Context context;
     private Activity activity;
 
-    DbDownloadManager(Context _context, Activity _activity) {
-        context = _context;
+    DbDownloadManager(Activity _activity) {
         activity = _activity;
         checkDiskPermission();
+    }
+
+    void downloadData(){
         downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/34h5r7nkapro2m2/version.info");
         downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/sot724lwd5sf1a7/gastrofull.db");
     }
@@ -42,11 +43,10 @@ class DbDownloadManager {
         request.setDescription("Datenbank von Reservationen");
         request.setTitle(basename);
         request.allowScanningByMediaScanner();
-        //Log.d("db reading", "download from dropb to: "+ Environment.getExternalStorageDirectory().getAbsolutePath() + "/databases/" + basename);
-        //Log.d("db reading", "download from dropb to: "+ Environment.DIRECTORY_DOWNLOADS +"/"+ basename);
-        request.setDestinationInExternalPublicDir("DirTypeOfReservations", basename);
+        request.setDestinationInExternalPublicDir("ReservationenApp", basename);
 
         DownloadManager manager = (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
+        assert manager != null;
         manager.enqueue(request);
 
     }

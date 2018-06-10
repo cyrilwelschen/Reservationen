@@ -1,6 +1,6 @@
 package com.example.cyrilwelschen.reservationen;
 
-/**
+/*
  * Created by cyril on 10.06.18.
  *
  */
@@ -14,16 +14,13 @@ import com.javahelps.externalsqliteimporter.ExternalSQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseAccess {
+class DatabaseAccess {
     private ExternalSQLiteOpenHelper openHelper;
     private SQLiteDatabase database;
     private static DatabaseAccess instance;
 
     /**
      * Private constructor to avoid object creation from outside classes.
-     *
-     * @param context
-     * @param sourceDirectory
      */
     private DatabaseAccess(Context context, String sourceDirectory) {
         if (sourceDirectory == null) {
@@ -38,9 +35,9 @@ public class DatabaseAccess {
      *
      * @param context         the Context
      * @param sourceDirectory optional external directory
-     * @return the instance of DabaseAccess
+     * @return the instance of DatabaseAccess
      */
-    public static DatabaseAccess getInstance(Context context, String sourceDirectory) {
+    static DatabaseAccess getInstance(Context context, String sourceDirectory) {
         if (instance == null) {
             instance = new DatabaseAccess(context, sourceDirectory);
         }
@@ -50,14 +47,14 @@ public class DatabaseAccess {
     /**
      * Open the database connection.
      */
-    public void open() {
+    void open() {
         this.database = openHelper.getWritableDatabase();
     }
 
     /**
      * Close the database connection.
      */
-    public void close() {
+    void close() {
         if (database != null) {
             this.database.close();
         }
@@ -68,7 +65,7 @@ public class DatabaseAccess {
      *
      * @return a List of quotes
      */
-    public List<Reservation> getAllReservations() {
+    List<Reservation> getAllReservations() {
         List<Reservation> allRes = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM reservations", null);
         cursor.moveToFirst();

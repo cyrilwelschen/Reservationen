@@ -19,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
         int width = size.x;
         int height = size.y;
 
-        DbDownloadManager dbManager = new DbDownloadManager(MainActivity.this, this);
+        DbDownloadManager dbManager = new DbDownloadManager(this);
+        dbManager.downloadData();
 
         // Setup DisplayManager
         DisplayManager displayManager = new DisplayManager(width, height, this, MainActivity.this);

@@ -65,7 +65,7 @@ class ReservationRenderer {
         boolean fromExternalSource = true;
         if (fromExternalSource) {
             // Check the external database file. External database must be available for the first time deployment.
-            String externalDirectory = Environment.getExternalStoragePublicDirectory("DirTypeOfReservations").getAbsolutePath();
+            String externalDirectory = Environment.getExternalStoragePublicDirectory("ReservationenApp").getAbsolutePath();
             File dbFile = new File(externalDirectory, DatabaseOpenHelper.DATABASE_NAME);
             Log.d("db reading", "external dir path: " + dbFile.toString());
             if (!dbFile.exists()) {

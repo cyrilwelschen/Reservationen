@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
-import android.net.ParseException;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -14,9 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by cyril on 07.06.18.
@@ -27,48 +24,43 @@ import java.util.concurrent.TimeUnit;
 
 public class DisplayManager implements ScrollViewListener{
 
-    private int GUESSED_ROOMS_IN_DISPLAY = 18;
-    private int DATES_IN_DISPLAY = 50;
     private int xScreenPixelNumber;
     private int yScreenPixelNumber;
     private long dayToPixelRatio;
     private long roomToPixelRatio;
 
-    final int ROOM_GRID_HEIGHT = 90;
-    final int ROOM_GRID_WIDTH = 100;
+    private final int ROOM_GRID_HEIGHT = 90;
+    private final int ROOM_GRID_WIDTH = 100;
     private RelativeLayout mLayout;
     private int eventIndex;
     private ObservableScrollView dateScroll;
     private ObservableScrollView resHorizontalScroll;
 
     private Context context;
-    public Activity activity;
 
     private ReservationRenderer resRenderer;
 
 
     /// Display constants
-    List<Integer> roomList = Arrays.asList(301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 314, 315, 316, 317, 300, 320, 330, 340, 350);
-    int TOTAL_NUMBER_OF_DAYS = 300;
-    int NUMBER_OF_DAYS_IN_PAST = 250;
-    int PIXELS_PER_DAY = 200;
-    double INTER_DAY_PIXEL_OFFSET_PERCENTAGE = 0.05;
+    private List<Integer> roomList = Arrays.asList(301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 314, 315, 316, 317, 300, 320, 330, 340, 350);
+    private int TOTAL_NUMBER_OF_DAYS = 300;
+    private int NUMBER_OF_DAYS_IN_PAST = 250;
+    private int PIXELS_PER_DAY = 200;
 
-    DisplayManager(int width, int height, Activity _activity, Context _context) {
-        this.activity = _activity;
+    DisplayManager(int width, int height, Activity activity, Context _context) {
         context = _context;
         xScreenPixelNumber = width;
         yScreenPixelNumber = height;
         setDayToPixelRation();
         setRoomToPixelRation();
 
-        mLayout = this.activity.findViewById(R.id.relative_layout);
-        RelativeLayout roomsColumnLayout = this.activity.findViewById(R.id.rooms_column);
-        RelativeLayout datesRowLayout = this.activity.findViewById(R.id.dates_row);
+        mLayout = activity.findViewById(R.id.relative_layout);
+        RelativeLayout roomsColumnLayout = activity.findViewById(R.id.rooms_column);
+        RelativeLayout datesRowLayout = activity.findViewById(R.id.dates_row);
 
-        dateScroll = this.activity.findViewById(R.id.dates_scroll_view);
+        dateScroll = activity.findViewById(R.id.dates_scroll_view);
         dateScroll.setScrollViewListener(this);
-        resHorizontalScroll = this.activity.findViewById(R.id.horizontal_scroll_view);
+        resHorizontalScroll = activity.findViewById(R.id.horizontal_scroll_view);
         resHorizontalScroll.setScrollViewListener(this);
 
         eventIndex = mLayout.getChildCount();
@@ -87,7 +79,6 @@ public class DisplayManager implements ScrollViewListener{
 
         standardGrid(datesRowLayout, dateIndex);
         roomGrid(roomsColumnLayout, roomIndex);
-        //createReservationView();
     }
 
     void deviceSetup(){
@@ -102,11 +93,13 @@ public class DisplayManager implements ScrollViewListener{
     }
 
     private void setDayToPixelRation(){
-        roomToPixelRatio = DATES_IN_DISPLAY/yScreenPixelNumber;
+        int DATES_IN_DISPLAY = 50;
+        roomToPixelRatio = DATES_IN_DISPLAY /yScreenPixelNumber;
     }
 
     private void setRoomToPixelRation(){
-        dayToPixelRatio = GUESSED_ROOMS_IN_DISPLAY/xScreenPixelNumber;
+        int GUESSED_ROOMS_IN_DISPLAY = 18;
+        dayToPixelRatio = GUESSED_ROOMS_IN_DISPLAY /xScreenPixelNumber;
     }
 
     void displayReservations(){
@@ -124,9 +117,6 @@ public class DisplayManager implements ScrollViewListener{
         Log.d("ROOM NR", "input: "+ Integer.toString(roomNumber));
         Log.d("ROOM NR", "output: "+ roomList.indexOf(roomNumber));
         return roomList.indexOf(roomNumber);
-    }
-
-    private void getReservations(){
     }
 
     private void standardGrid(RelativeLayout layout, int layout_counter){
@@ -165,21 +155,6 @@ public class DisplayManager implements ScrollViewListener{
         layout.addView(darkGrayView, counter - 1);
     }
 
-    private void createReservationView() {
-        int height_all = 90;
-        ReservationRenderer dataTest = new ReservationRenderer(activity);
-        String labelOne = dataTest.singleDataTest();
-        List<String> reservation = dataTest.singleReservationTest();
-        Reservation resTest = new Reservation("2", "303","12.06.2018", "15.06.2018", "Cyril");
-        //createSingleReservationView(1, 110, height_all, 200*3-20, labelOne);
-        //createSingleReservationView(2, 110, height_all, 200-20, resTest.inString);
-        createSingleReservationView(2, 310, height_all, 200-20, Integer.toString(resTest.inDiff));
-        createSingleReservationView(3, 310, height_all, 200*9-20, reservation.get(1));
-        createSingleReservationView(4, 510, height_all, 200*3-20, "H4");
-        createSingleReservationView(5, 310, height_all, 200*4-20, "H5");
-        createSingleReservationView(6, 1210, height_all, 200*6-20, "H6");
-    }
-
     private void createSingleReservationView(int top, int left, int height, int width, String label) {
         TextView mEventView = new TextView(context);
         RelativeLayout.LayoutParams lParam = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -199,7 +174,6 @@ public class DisplayManager implements ScrollViewListener{
 
     private void roomGrid(RelativeLayout layout, int layoutCounter){
         for (int i = 0; i<roomList.size(); i++){
-            int j = i+1;
             createRoomView(layout, layoutCounter, i, ROOM_GRID_HEIGHT, ROOM_GRID_WIDTH, roomList.get(i).toString());
         }
     }
