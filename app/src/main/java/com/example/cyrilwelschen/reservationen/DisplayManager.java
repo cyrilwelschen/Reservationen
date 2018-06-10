@@ -2,7 +2,9 @@ package com.example.cyrilwelschen.reservationen;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Handler;
@@ -26,8 +28,6 @@ public class DisplayManager implements ScrollViewListener{
 
     private int xScreenPixelNumber;
     private int yScreenPixelNumber;
-    private long dayToPixelRatio;
-    private long roomToPixelRatio;
 
     private final int ROOM_GRID_HEIGHT = 90;
     private final int ROOM_GRID_WIDTH = 100;
@@ -37,38 +37,51 @@ public class DisplayManager implements ScrollViewListener{
     private ObservableScrollView resHorizontalScroll;
 
     private Context context;
+    private Activity activity;
 
     private ReservationRenderer resRenderer;
 
+    private RelativeLayout roomsColumnLayout;
+    private RelativeLayout datesRowLayout;
 
     /// Display constants
-    private List<Integer> roomList = Arrays.asList(301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 314, 315, 316, 317, 300, 320, 330, 340, 350);
-    private int TOTAL_NUMBER_OF_DAYS = 300;
-    private int NUMBER_OF_DAYS_IN_PAST = 250;
-    private int PIXELS_PER_DAY = 200;
+    private List<Integer> roomList = Arrays.asList(301, 302, 303, 304, 305, 307, 308, 309, 310, 311, 314, 315, 316, 317, 300, 320, 330, 340, 350);
+    private int TOTAL_NUMBER_OF_DAYS = 800;
+    private int NUMBER_OF_DAYS_IN_PAST = 400;
+    private int PIXELS_PER_DAY = 100;
+    private int PIXELS_PER_ROOM = 100;
 
-    DisplayManager(int width, int height, Activity activity, Context _context) {
+    DisplayManager(int width, int height, Activity _activity, Context _context) {
         context = _context;
+        activity = _activity;
         xScreenPixelNumber = width;
         yScreenPixelNumber = height;
         setDayToPixelRation();
         setRoomToPixelRation();
 
         mLayout = activity.findViewById(R.id.relative_layout);
-        RelativeLayout roomsColumnLayout = activity.findViewById(R.id.rooms_column);
-        RelativeLayout datesRowLayout = activity.findViewById(R.id.dates_row);
+        roomsColumnLayout = activity.findViewById(R.id.rooms_column);
+        datesRowLayout = activity.findViewById(R.id.dates_row);
 
         dateScroll = activity.findViewById(R.id.dates_scroll_view);
         dateScroll.setScrollViewListener(this);
         resHorizontalScroll = activity.findViewById(R.id.horizontal_scroll_view);
         resHorizontalScroll.setScrollViewListener(this);
-
         eventIndex = mLayout.getChildCount();
+
+        resRenderer = new ReservationRenderer(activity);
+    }
+
+    void deviceSetup(){
         int roomIndex = roomsColumnLayout.getChildCount();
         int dateIndex = datesRowLayout.getChildCount();
 
-        resRenderer = new ReservationRenderer(activity);
+        setDayToPixelRation();
+        standardGrid(datesRowLayout, dateIndex);
+        roomGrid(roomsColumnLayout, roomIndex);
+    }
 
+    void scrollToToday() {
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
             @Override
@@ -76,37 +89,26 @@ public class DisplayManager implements ScrollViewListener{
                 resHorizontalScroll.scrollTo(PIXELS_PER_DAY*(NUMBER_OF_DAYS_IN_PAST - 1), 0);
             }
         }, 500);
-
-        standardGrid(datesRowLayout, dateIndex);
-        roomGrid(roomsColumnLayout, roomIndex);
-    }
-
-    void deviceSetup(){
-        displayDateGrid();
-        displayRoomGrid();
-    }
-
-    private void displayDateGrid(){
-    }
-
-    private void displayRoomGrid() {
     }
 
     private void setDayToPixelRation(){
-        int DATES_IN_DISPLAY = 50;
-        roomToPixelRatio = DATES_IN_DISPLAY /yScreenPixelNumber;
+        int DATES_IN_DISPLAY = 7;
+        if (activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            DATES_IN_DISPLAY = 21;
+        }
+        PIXELS_PER_DAY = (xScreenPixelNumber-ROOM_GRID_WIDTH)/DATES_IN_DISPLAY;
     }
 
     private void setRoomToPixelRation(){
-        int GUESSED_ROOMS_IN_DISPLAY = 18;
-        dayToPixelRatio = GUESSED_ROOMS_IN_DISPLAY /xScreenPixelNumber;
+        int GUESSED_ROOMS_IN_DISPLAY = roomList.size();
+        PIXELS_PER_ROOM = yScreenPixelNumber/GUESSED_ROOMS_IN_DISPLAY;
     }
 
     void displayReservations(){
         List<Reservation> resToDisplay = resRenderer.renderReservationListInRange();
         for (Reservation res : resToDisplay) {
             createSingleReservationView(roomToIndex(res.roomNr),
-                    PIXELS_PER_DAY*res.inDiff + 110 + PIXELS_PER_DAY*(NUMBER_OF_DAYS_IN_PAST+1),
+                    PIXELS_PER_DAY*res.inDiff + PIXELS_PER_DAY/2 + 10 + PIXELS_PER_DAY*(NUMBER_OF_DAYS_IN_PAST+1),
                     90,
                     PIXELS_PER_DAY*(res.outDiff- res.inDiff)-20,
                      res.guestName);
@@ -122,14 +124,20 @@ public class DisplayManager implements ScrollViewListener{
     private void standardGrid(RelativeLayout layout, int layout_counter){
         for (int i = 1; i<TOTAL_NUMBER_OF_DAYS; i++) {
             String color;
-            if (i-NUMBER_OF_DAYS_IN_PAST == 0) {
-                color = "#ababab";
-            } else if (i%2 == 0) {
+            int tf = Typeface.NORMAL;
+            int intDayDiff = i-NUMBER_OF_DAYS_IN_PAST;
+            if (isToday(intDayDiff)) {
+                color = "#cd5c5c";
+                tf = Typeface.BOLD_ITALIC;
+            } else if (isWeekend(intDayDiff)) {
+                color = "#c0c0c0";
+                tf = Typeface.BOLD;
+            } else if (isOddDay(intDayDiff)){
                 color = "#dcdcdc";
             } else {
-                color = "#ffffff";
+                color = "#f5f5f5";
             }
-            drawString(layout, layout_counter, 200 * i, intDiffToDateString(i-NUMBER_OF_DAYS_IN_PAST), color);
+            drawString(layout, layout_counter, PIXELS_PER_DAY * i, intDiffToDateString(i - NUMBER_OF_DAYS_IN_PAST), color, tf);
         }
     }
 
@@ -140,7 +148,23 @@ public class DisplayManager implements ScrollViewListener{
         return sdf.format(todayCal);
     }
 
-    private void drawString(RelativeLayout layout, int counter, int leftMargin, String label, String color){
+    private boolean isToday(int intDayDiff){
+        return intDayDiff == 20;
+    }
+
+    private boolean isOddDay(int intDayDiff){
+        Calendar todayCal = Calendar.getInstance();
+        todayCal.add(Calendar.DATE, intDayDiff);
+        return todayCal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY || todayCal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY;
+    }
+
+    private boolean isWeekend(int intDayDiff){
+        Calendar todayCal = Calendar.getInstance();
+        todayCal.add(Calendar.DATE, intDayDiff);
+        return todayCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || todayCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
+    }
+
+    private void drawString(RelativeLayout layout, int counter, int leftMargin, String label, String color, int typeface){
         TextView darkGrayView = new TextView(context);
         RelativeLayout.LayoutParams lParam = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
         lParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -148,6 +172,7 @@ public class DisplayManager implements ScrollViewListener{
         lParam.leftMargin = leftMargin;
         darkGrayView.setLayoutParams(lParam);
         darkGrayView.setWidth(200);
+        darkGrayView.setTypeface(null, typeface);
         darkGrayView.setTextColor(Color.parseColor("#000000"));
         darkGrayView.setText(label);
         darkGrayView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);

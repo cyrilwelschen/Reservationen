@@ -26,5 +26,6 @@ public class MainActivity extends AppCompatActivity {
         DisplayManager displayManager = new DisplayManager(width, height, this, MainActivity.this);
         displayManager.deviceSetup();
         displayManager.displayReservations();
+        displayManager.scrollToToday();
     }
 }
