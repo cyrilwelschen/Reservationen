@@ -18,36 +18,18 @@ public class Reservation {
 
     private SimpleDateFormat myFormat = new SimpleDateFormat("dd.MM.yyyy");
     public int id;
-    int resId;
-    String inString;
-    String outString;
     int inDiff;
     int outDiff;
-    Date inDate;
-    Date outDate;
     String guestName;
     String toString;
     int roomNr;
 
     Reservation(String reservationId, String roomNumber, String checkIn, String checkOut, String guest){
-        resId = resIdToInteger(reservationId);
         roomNr = roomNumberToInteger(roomNumber);
         inDiff = stringToDateDiff(checkIn);
         outDiff = stringToDateDiff(checkOut);
-        inDate = stringToDate(checkIn);
-        outDate = stringToDate(checkOut);
-        inString = checkIn;
-        outString = checkOut;
         guestName = guest;
         toString = reservationId + " " + guest + " " + roomNumber + " " + checkIn + " " + checkOut + " ";
-    }
-
-    private int idToInteger(String ID){
-        return Integer.parseInt(ID);
-    }
-
-    private int resIdToInteger(String reservationID){
-        return Integer.parseInt(reservationID);
     }
 
     private int roomNumberToInteger(String roomNumber){
@@ -73,13 +55,4 @@ public class Reservation {
         return toIntExact(dateDiffLong - correctForPast);
     }
 
-    private Date stringToDate(String checkIn){
-        Date returnDate = new Date();
-        try {
-            returnDate = myFormat.parse(checkIn);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return returnDate;
-    }
 }
