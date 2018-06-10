@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Reservationen</string>
+    <string name="go_home">go_home</string>
+    <string name="pick_date">pick_date</string>
+    <string name="reload">reload</string>
 </resources>
