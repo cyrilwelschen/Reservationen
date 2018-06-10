@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Reservationen.iml" filepath="$PROJECT_DIR$/Reservationen.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/externalsqliteimporter/externalsqliteimporter.iml" filepath="$PROJECT_DIR$/externalsqliteimporter/externalsqliteimporter.iml" />
     </modules>
   </component>
 </project>

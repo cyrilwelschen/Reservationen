@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
 
 /**
@@ -42,7 +43,10 @@ class DbDownloadManager {
         String basename = parts[parts.length-1];
         request.setDescription("Datenbank von Reservationen");
         request.setTitle(basename);
-        request.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, basename);
+        request.allowScanningByMediaScanner();
+        //Log.d("db reading", "download from dropb to: "+ Environment.getExternalStorageDirectory().getAbsolutePath() + "/databases/" + basename);
+        //Log.d("db reading", "download from dropb to: "+ Environment.DIRECTORY_DOWNLOADS +"/"+ basename);
+        request.setDestinationInExternalPublicDir("DirTypeOfReservations", basename);
 
         DownloadManager manager = (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
         manager.enqueue(request);

@@ -1,7 +1,12 @@
 package com.example.cyrilwelschen.reservationen;
 
+import android.app.Activity;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
+import android.util.Log;
+import android.widget.ArrayAdapter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +23,11 @@ class ReservationRenderer {
 
     String singleDataTest() {
         return "hello";
+    }
+    Activity activity;
+
+    ReservationRenderer(Activity _activity) {
+        activity = _activity;
     }
 
     List<String> singleReservationTest() {
@@ -44,7 +54,40 @@ class ReservationRenderer {
         reservationListInRange.add(res2);
         reservationListInRange.add(res3);
         reservationListInRange.add(res4);
+        List<String> allReservationsFromDb = getReservations();
         return reservationListInRange;
     }
+
+    List<String> getReservations() {
+        Log.d("db reading", "start call of function getReservations");
+        DatabaseAccess databaseAccess;
+        boolean fromExternalSource = true;
+        if (fromExternalSource) {
+            // Check the external database file. External database must be available for the first time deployment.
+            String externalDirectory = Environment.getExternalStoragePublicDirectory("DirTypeOfReservations").getAbsolutePath();
+            File dbFile = new File(externalDirectory, DatabaseOpenHelper.DATABASE_NAME);
+            Log.d("db reading", "external dir path: " + dbFile.toString());
+            if (!dbFile.exists()) {
+                List<String> returnListFail = new ArrayList<>();
+                Log.d("db reading", "------- DIDN'T FIND DB ---------");
+                return returnListFail;
+            }
+            // If external database is available, deploy it
+            databaseAccess = DatabaseAccess.getInstance(activity, externalDirectory);
+        } else {
+            // From assets
+            databaseAccess = DatabaseAccess.getInstance(activity, null);
+        }
+
+        databaseAccess.open();
+        List<String> quotes = databaseAccess.getQuotes();
+        databaseAccess.close();
+        for (String st : quotes) {
+            Log.d("db reading", st);
+        }
+
+        return quotes;
+    }
+
 
 }
