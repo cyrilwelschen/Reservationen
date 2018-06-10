@@ -45,7 +45,6 @@ public class DisplayManager implements ScrollViewListener{
 
     /// Display constants
     private List<Integer> roomList = Arrays.asList(301, 302, 303, 304, 305, 307, 308, 309, 310, 311, 314, 315, 316, 317, 300, 320, 330, 340, 350);
-    private int TOTAL_NUMBER_OF_DAYS = 800;
     private int NUMBER_OF_DAYS_IN_PAST = 400;
     private int PIXELS_PER_DAY = 100;
     private int PIXELS_PER_ROOM = 100;
@@ -100,9 +99,9 @@ public class DisplayManager implements ScrollViewListener{
 
     private void setRoomToPixelRation(){
         int GUESSED_ROOMS_IN_DISPLAY = roomList.size();
-        PIXELS_PER_ROOM = (yScreenPixelNumber-100)/GUESSED_ROOMS_IN_DISPLAY;
+        PIXELS_PER_ROOM = (yScreenPixelNumber-290)/GUESSED_ROOMS_IN_DISPLAY;
         if (activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            PIXELS_PER_ROOM = 2*(yScreenPixelNumber-100)/GUESSED_ROOMS_IN_DISPLAY;
+            PIXELS_PER_ROOM = 2*(yScreenPixelNumber-290)/GUESSED_ROOMS_IN_DISPLAY;
         }
     }
 
@@ -124,7 +123,8 @@ public class DisplayManager implements ScrollViewListener{
     }
 
     private void standardGrid(RelativeLayout layout, int layout_counter){
-        for (int i = 1; i<TOTAL_NUMBER_OF_DAYS; i++) {
+        int TOTAL_NUMBER_OF_DAYS = 800;
+        for (int i = 1; i< TOTAL_NUMBER_OF_DAYS; i++) {
             String color;
             int tf = Typeface.NORMAL;
             int intDayDiff = i-NUMBER_OF_DAYS_IN_PAST;
@@ -146,12 +146,12 @@ public class DisplayManager implements ScrollViewListener{
     private String intDiffToDateString(int intDayDiff){
         Calendar todayCal = Calendar.getInstance();
         todayCal.add(Calendar.DATE, intDayDiff);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM.yy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM");
         return sdf.format(todayCal);
     }
 
     private boolean isToday(int intDayDiff){
-        return intDayDiff == 20;
+        return intDayDiff == 0;
     }
 
     private boolean isOddDay(int intDayDiff){
@@ -177,6 +177,7 @@ public class DisplayManager implements ScrollViewListener{
         darkGrayView.setTypeface(null, typeface);
         darkGrayView.setTextColor(Color.parseColor("#000000"));
         darkGrayView.setText(label);
+        darkGrayView.setTextSize(12);
         darkGrayView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         darkGrayView.setBackgroundColor(Color.parseColor(color));
         layout.addView(darkGrayView, counter - 1);
