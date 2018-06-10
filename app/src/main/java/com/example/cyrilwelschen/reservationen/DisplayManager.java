@@ -7,6 +7,7 @@ import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.net.ParseException;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -47,8 +48,9 @@ public class DisplayManager implements ScrollViewListener{
 
 
     /// Display constants
-    int TOTAL_NUMBER_OF_DAYS = 50;
-    int NUMBER_OF_DAYS_IN_PAST = 10;
+    List<Integer> roomList = Arrays.asList(301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 314, 315, 316, 317, 300, 320, 330, 340, 350);
+    int TOTAL_NUMBER_OF_DAYS = 300;
+    int NUMBER_OF_DAYS_IN_PAST = 250;
     int PIXELS_PER_DAY = 200;
     double INTER_DAY_PIXEL_OFFSET_PERCENTAGE = 0.05;
 
@@ -85,7 +87,7 @@ public class DisplayManager implements ScrollViewListener{
 
         standardGrid(datesRowLayout, dateIndex);
         roomGrid(roomsColumnLayout, roomIndex);
-        createReservationView();
+        //createReservationView();
     }
 
     void deviceSetup(){
@@ -119,7 +121,8 @@ public class DisplayManager implements ScrollViewListener{
     }
 
     private int roomToIndex(int roomNumber) {
-        List<Integer> roomList = Arrays.asList(301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319);
+        Log.d("ROOM NR", "input: "+ Integer.toString(roomNumber));
+        Log.d("ROOM NR", "output: "+ roomList.indexOf(roomNumber));
         return roomList.indexOf(roomNumber);
     }
 
@@ -127,7 +130,7 @@ public class DisplayManager implements ScrollViewListener{
     }
 
     private void standardGrid(RelativeLayout layout, int layout_counter){
-        for (int i = 1; i<50; i++) {
+        for (int i = 1; i<TOTAL_NUMBER_OF_DAYS; i++) {
             String color;
             if (i-NUMBER_OF_DAYS_IN_PAST == 0) {
                 color = "#ababab";
@@ -143,7 +146,7 @@ public class DisplayManager implements ScrollViewListener{
     private String intDiffToDateString(int intDayDiff){
         Calendar todayCal = Calendar.getInstance();
         todayCal.add(Calendar.DATE, intDayDiff);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM.yy");
         return sdf.format(todayCal);
     }
 
@@ -167,7 +170,7 @@ public class DisplayManager implements ScrollViewListener{
         ReservationRenderer dataTest = new ReservationRenderer(activity);
         String labelOne = dataTest.singleDataTest();
         List<String> reservation = dataTest.singleReservationTest();
-        Reservation resTest = new Reservation("1", "2", "303","12.06.2018", "15.06.2018", "Cyril");
+        Reservation resTest = new Reservation("2", "303","12.06.2018", "15.06.2018", "Cyril");
         //createSingleReservationView(1, 110, height_all, 200*3-20, labelOne);
         //createSingleReservationView(2, 110, height_all, 200-20, resTest.inString);
         createSingleReservationView(2, 310, height_all, 200-20, Integer.toString(resTest.inDiff));
@@ -195,9 +198,9 @@ public class DisplayManager implements ScrollViewListener{
     }
 
     private void roomGrid(RelativeLayout layout, int layoutCounter){
-        for (int i = 0; i<21; i++){
+        for (int i = 0; i<roomList.size(); i++){
             int j = i+1;
-            createRoomView(layout, layoutCounter, i, ROOM_GRID_HEIGHT, ROOM_GRID_WIDTH, String.valueOf(300+j));
+            createRoomView(layout, layoutCounter, i, ROOM_GRID_HEIGHT, ROOM_GRID_WIDTH, roomList.get(i).toString());
         }
     }
 

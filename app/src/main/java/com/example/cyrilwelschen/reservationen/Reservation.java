@@ -26,10 +26,10 @@ public class Reservation {
     Date inDate;
     Date outDate;
     String guestName;
+    String toString;
     int roomNr;
 
-    Reservation(String ID, String reservationId, String roomNumber, String checkIn, String checkOut, String guest){
-        id = idToInteger(ID);
+    Reservation(String reservationId, String roomNumber, String checkIn, String checkOut, String guest){
         resId = resIdToInteger(reservationId);
         roomNr = roomNumberToInteger(roomNumber);
         inDiff = stringToDateDiff(checkIn);
@@ -39,6 +39,7 @@ public class Reservation {
         inString = checkIn;
         outString = checkOut;
         guestName = guest;
+        toString = reservationId + " " + guest + " " + roomNumber + " " + checkIn + " " + checkOut + " ";
     }
 
     private int idToInteger(String ID){

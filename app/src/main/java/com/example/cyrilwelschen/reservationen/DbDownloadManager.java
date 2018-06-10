@@ -6,9 +6,7 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 
 
 /**
@@ -25,8 +23,8 @@ class DbDownloadManager {
         context = _context;
         activity = _activity;
         checkDiskPermission();
-        downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/387m0eytkoey2ii/gastro.db");
         downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/34h5r7nkapro2m2/version.info");
+        downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/sot724lwd5sf1a7/gastrofull.db");
     }
 
     private void checkDiskPermission ()

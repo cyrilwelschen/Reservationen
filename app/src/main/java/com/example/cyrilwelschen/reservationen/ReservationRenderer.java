@@ -41,24 +41,25 @@ class ReservationRenderer {
     }
 
     List<Reservation> renderReservationListInRange(){
-        Reservation res1 = new Reservation("1", "10", "315",
+        Reservation res1 = new Reservation("10", "315",
                 "12.06.2018", "15.06.2018" ,"Sammy");
-        Reservation res3 = new Reservation("1", "10", "312",
+        Reservation res3 = new Reservation("10", "312",
                 "11.06.2018", "16.06.2018" ,"Elmi");
-        Reservation res2 = new Reservation("1", "10", "317",
+        Reservation res2 = new Reservation("10", "317",
                 "06.06.2018", "12.06.2018" ,"Cyril");
-        Reservation res4 = new Reservation("1", "10", "313",
+        Reservation res4 = new Reservation("10", "313",
                 "08.06.2018", "11.06.2018" ,"Kinan");
         List<Reservation> reservationListInRange = new ArrayList<>();
         reservationListInRange.add(res1);
         reservationListInRange.add(res2);
         reservationListInRange.add(res3);
         reservationListInRange.add(res4);
-        List<String> allReservationsFromDb = getReservations();
-        return reservationListInRange;
+        List<Reservation> allReservationsFromDb = getReservations();
+        //return reservationListInRange;
+        return allReservationsFromDb;
     }
 
-    List<String> getReservations() {
+    List<Reservation> getReservations() {
         Log.d("db reading", "start call of function getReservations");
         DatabaseAccess databaseAccess;
         boolean fromExternalSource = true;
@@ -68,7 +69,7 @@ class ReservationRenderer {
             File dbFile = new File(externalDirectory, DatabaseOpenHelper.DATABASE_NAME);
             Log.d("db reading", "external dir path: " + dbFile.toString());
             if (!dbFile.exists()) {
-                List<String> returnListFail = new ArrayList<>();
+                List<Reservation> returnListFail = new ArrayList<>();
                 Log.d("db reading", "------- DIDN'T FIND DB ---------");
                 return returnListFail;
             }
@@ -80,13 +81,13 @@ class ReservationRenderer {
         }
 
         databaseAccess.open();
-        List<String> quotes = databaseAccess.getQuotes();
+        List<Reservation> allReservations = databaseAccess.getAllReservations();
         databaseAccess.close();
-        for (String st : quotes) {
-            Log.d("db reading", st);
+        for (Reservation res : allReservations) {
+            Log.d("db reading", res.toString);
         }
 
-        return quotes;
+        return allReservations;
     }
 
 

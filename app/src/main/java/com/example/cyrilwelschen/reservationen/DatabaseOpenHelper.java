@@ -13,7 +13,7 @@ public class DatabaseOpenHelper extends ExternalSQLiteOpenHelper {
     /**
      * Name of the database.
      */
-    public static final String DATABASE_NAME = "gastro.db";
+    public static final String DATABASE_NAME = "gastrofull.db";
 
     /**
      * Version of the database. Only used to import from assets.

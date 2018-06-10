@@ -68,15 +68,16 @@ public class DatabaseAccess {
      *
      * @return a List of quotes
      */
-    public List<String> getQuotes() {
-        List<String> list = new ArrayList<>();
+    public List<Reservation> getAllReservations() {
+        List<Reservation> allRes = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM reservations", null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            list.add(cursor.getString(0));
+            Reservation currentRes = new Reservation(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
+            allRes.add(currentRes);
             cursor.moveToNext();
         }
         cursor.close();
-        return list;
+        return allRes;
     }
 }
