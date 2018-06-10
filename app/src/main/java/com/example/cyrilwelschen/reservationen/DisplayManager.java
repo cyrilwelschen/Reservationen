@@ -29,7 +29,6 @@ public class DisplayManager implements ScrollViewListener{
     private int xScreenPixelNumber;
     private int yScreenPixelNumber;
 
-    private final int ROOM_GRID_HEIGHT = 90;
     private final int ROOM_GRID_WIDTH = 100;
     private RelativeLayout mLayout;
     private int eventIndex;
@@ -101,7 +100,10 @@ public class DisplayManager implements ScrollViewListener{
 
     private void setRoomToPixelRation(){
         int GUESSED_ROOMS_IN_DISPLAY = roomList.size();
-        PIXELS_PER_ROOM = yScreenPixelNumber/GUESSED_ROOMS_IN_DISPLAY;
+        PIXELS_PER_ROOM = (yScreenPixelNumber-100)/GUESSED_ROOMS_IN_DISPLAY;
+        if (activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            PIXELS_PER_ROOM = 2*(yScreenPixelNumber-100)/GUESSED_ROOMS_IN_DISPLAY;
+        }
     }
 
     void displayReservations(){
@@ -109,7 +111,7 @@ public class DisplayManager implements ScrollViewListener{
         for (Reservation res : resToDisplay) {
             createSingleReservationView(roomToIndex(res.roomNr),
                     PIXELS_PER_DAY*res.inDiff + PIXELS_PER_DAY/2 + 10 + PIXELS_PER_DAY*(NUMBER_OF_DAYS_IN_PAST+1),
-                    90,
+                    PIXELS_PER_ROOM - 10,
                     PIXELS_PER_DAY*(res.outDiff- res.inDiff)-20,
                      res.guestName);
         }
@@ -171,7 +173,7 @@ public class DisplayManager implements ScrollViewListener{
         lParam.topMargin = 0;
         lParam.leftMargin = leftMargin;
         darkGrayView.setLayoutParams(lParam);
-        darkGrayView.setWidth(200);
+        darkGrayView.setWidth(PIXELS_PER_DAY);
         darkGrayView.setTypeface(null, typeface);
         darkGrayView.setTextColor(Color.parseColor("#000000"));
         darkGrayView.setText(label);
@@ -184,7 +186,7 @@ public class DisplayManager implements ScrollViewListener{
         TextView mEventView = new TextView(context);
         RelativeLayout.LayoutParams lParam = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        lParam.topMargin = top * 100;
+        lParam.topMargin = top * PIXELS_PER_ROOM;
         lParam.leftMargin = left;
         mEventView.setLayoutParams(lParam);
         mEventView.setPadding(0, 0, 0, 0);
@@ -199,7 +201,7 @@ public class DisplayManager implements ScrollViewListener{
 
     private void roomGrid(RelativeLayout layout, int layoutCounter){
         for (int i = 0; i<roomList.size(); i++){
-            createRoomView(layout, layoutCounter, i, ROOM_GRID_HEIGHT, ROOM_GRID_WIDTH, roomList.get(i).toString());
+            createRoomView(layout, layoutCounter, i, PIXELS_PER_ROOM-10, ROOM_GRID_WIDTH, roomList.get(i).toString());
         }
     }
 
@@ -207,7 +209,7 @@ public class DisplayManager implements ScrollViewListener{
         TextView mEventView = new TextView(context);
         RelativeLayout.LayoutParams lParam = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        lParam.topMargin = top * 100;
+        lParam.topMargin = top * PIXELS_PER_ROOM;
         lParam.leftMargin = 0;
         mEventView.setLayoutParams(lParam);
         mEventView.setPadding(0, 0, 0, 0);

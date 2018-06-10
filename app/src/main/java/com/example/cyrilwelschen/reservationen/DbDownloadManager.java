@@ -43,6 +43,9 @@ class DbDownloadManager {
         request.setDescription("Datenbank von Reservationen");
         request.setTitle(basename);
         request.allowScanningByMediaScanner();
+        //todo: override existing db file
+        //todo: check if version.info is really needed
+        //todo: bug-fix when db doesn't exist already, loading is to fast and nothing is displayed
         request.setDestinationInExternalPublicDir("ReservationenApp", basename);
 
         DownloadManager manager = (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
