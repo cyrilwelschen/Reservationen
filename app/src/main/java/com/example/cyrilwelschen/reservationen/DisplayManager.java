@@ -15,7 +15,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static java.lang.StrictMath.toIntExact;
 
 /**
  * Created by cyril on 07.06.18.
@@ -84,9 +88,17 @@ public class DisplayManager implements ScrollViewListener{
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-                resHorizontalScroll.scrollTo(PIXELS_PER_DAY*(NUMBER_OF_DAYS_IN_PAST - 1), 0);
+                resHorizontalScroll.scrollTo(PIXELS_PER_DAY * (NUMBER_OF_DAYS_IN_PAST - 1), 0);
             }
         }, 500);
+    }
+
+    void scrollToDate(Calendar returnDate) {
+        Calendar todayCal = Calendar.getInstance();
+        Date today = todayCal.getTime();
+        long diff = returnDate.getTime().getTime() - today.getTime();
+        long dateDiffLong = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        resHorizontalScroll.scrollTo(PIXELS_PER_DAY*(toIntExact(dateDiffLong) + NUMBER_OF_DAYS_IN_PAST - 1), 0);
     }
 
     private void setDayToPixelRation(){
