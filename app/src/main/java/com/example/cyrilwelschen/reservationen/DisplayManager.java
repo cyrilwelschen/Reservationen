@@ -8,7 +8,6 @@ import android.graphics.Typeface;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -129,8 +128,6 @@ public class DisplayManager implements ScrollViewListener{
     }
 
     private int roomToIndex(int roomNumber) {
-        Log.d("ROOM NR", "input: "+ Integer.toString(roomNumber));
-        Log.d("ROOM NR", "output: "+ roomList.indexOf(roomNumber));
         return roomList.indexOf(roomNumber);
     }
 

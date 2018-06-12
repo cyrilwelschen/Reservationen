@@ -46,9 +46,6 @@ class ReservationRenderer {
         databaseAccess.open();
         List<Reservation> allReservations = databaseAccess.getAllReservations();
         databaseAccess.close();
-        for (Reservation res : allReservations) {
-            Log.d("db reading", res.toString);
-        }
 
         return allReservations;
     }

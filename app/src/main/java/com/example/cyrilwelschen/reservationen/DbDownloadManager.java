@@ -6,7 +6,11 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
+
+import java.io.File;
 
 
 /**
@@ -36,21 +40,30 @@ class DbDownloadManager {
     }
 
     private void downloadFromDropBoxUrl(String url) {
-
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         String[] parts = url.split("/");
         String basename = parts[parts.length-1];
         request.setDescription("Datenbank von Reservationen");
         request.setTitle(basename);
         request.allowScanningByMediaScanner();
-        //todo: override existing db file
-        //todo: check if version.info is really needed
-        //todo: bug-fix when db doesn't exist already, loading is to fast and nothing is displayed
+        //todo: bug-fix when db doesn't exist already or is downloading, display is to fast and nothing is shown
+        if (isFileExists("/ReservationenApp/"+basename)){
+            deleteFile("/ReservationenApp/"+basename);
+        }
         request.setDestinationInExternalPublicDir("ReservationenApp", basename);
 
         DownloadManager manager = (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
         assert manager != null;
         manager.enqueue(request);
+    }
 
+    private boolean isFileExists(String filename){
+        File folder1 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + filename);
+        return folder1.exists();
+    }
+
+    private void deleteFile( String filename){
+        File folder1 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + filename);
+        folder1.delete();
     }
 }

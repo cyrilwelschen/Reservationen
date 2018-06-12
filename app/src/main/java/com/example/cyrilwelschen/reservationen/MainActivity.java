@@ -35,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
         int width = size.x;
         int height = size.y;
 
-        dbManager = new DbDownloadManager(this);
-        dbManager.downloadData();
         // todo: change subtitle to actual version of database
         MainActivity.this.getSupportActionBar().setSubtitle("Stand: 12.06.18 00:12");
 
@@ -45,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
         displayManager.deviceSetup();
         displayManager.displayReservations();
         displayManager.scrollToToday();
+
+        dbManager = new DbDownloadManager(this);
+        dbManager.downloadData();
     }
 
     @Override
@@ -88,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private DatePickerDialog createDialogWithoutDateField() {
+        // todo: this doesn't work, make it work without attempting to display only month and year
+        // todo: change color of date picker to app theme
         DatePickerDialog dpd = new DatePickerDialog(this, null, 2018, 5, 24);
         try {
             java.lang.reflect.Field[] datePickerDialogFields = dpd.getClass().getDeclaredFields();
