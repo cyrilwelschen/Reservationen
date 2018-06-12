@@ -5,6 +5,7 @@ import android.graphics.Point;
 import android.icu.util.Calendar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        //setSupportActionBar(myToolbar);
 
         // window size in pixel
         Display display = getWindowManager().getDefaultDisplay();
@@ -34,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
         dbManager = new DbDownloadManager(this);
         dbManager.downloadData();
+        // todo: change subtitle to actual version of database
+        MainActivity.this.getSupportActionBar().setSubtitle("Stand: 12.06.18 00:12");
 
         // Setup DisplayManager
         displayManager = new DisplayManager(width, height, this, MainActivity.this);

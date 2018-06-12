@@ -151,6 +151,7 @@ public class DisplayManager implements ScrollViewListener{
             } else {
                 color = "#f5f5f5";
             }
+            // todo: adapt display of date in landscape mode towards better readability
             drawString(layout, layout_counter, PIXELS_PER_DAY * i, intDiffToDateString(i - NUMBER_OF_DAYS_IN_PAST), color, tf);
         }
     }
