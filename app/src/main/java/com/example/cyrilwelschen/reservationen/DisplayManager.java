@@ -209,7 +209,7 @@ public class DisplayManager implements ScrollViewListener{
         mEventView.setGravity(0x11);
         mEventView.setTextColor(Color.parseColor("#ffffff"));
         mEventView.setText(label);
-        mEventView.setBackgroundColor(Color.parseColor("#3F51B5"));
+        mEventView.setBackgroundResource(R.drawable.single_reservation_style);
         mLayout.addView(mEventView, eventIndex - 1);
     }
 
