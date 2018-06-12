@@ -13,14 +13,14 @@ import android.icu.util.Calendar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.DatePicker;
 import android.widget.Toast;
+
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
                     String action = intent.getAction();
                     if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
                         displayManager.displayReservations();
-                        displayManager.scrollToToday();
                     }
                 }
             };
@@ -108,8 +107,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.pick_date:
-                DatePickerDialog datePickerDialog = createDialogWithoutDateField();
-                datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+                Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         Calendar datePicked = Calendar.getInstance();
@@ -118,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                         datePicked.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
                         displayManager.scrollToDate(datePicked);
                     }
-                });
+                }, year, month, day);
                 datePickerDialog.show();
                 return true;
 
@@ -131,33 +133,5 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private DatePickerDialog createDialogWithoutDateField() {
-        // todo: this doesn't work, make it work without attempting to display only month and year
-        // todo: change color of date picker to app theme
-        DatePickerDialog dpd = new DatePickerDialog(this, null, 2018, 5, 24);
-        try {
-            java.lang.reflect.Field[] datePickerDialogFields = dpd.getClass().getDeclaredFields();
-            for (java.lang.reflect.Field datePickerDialogField : datePickerDialogFields) {
-                if (datePickerDialogField.getName().equals("mDatePicker")) {
-                    datePickerDialogField.setAccessible(true);
-                    DatePicker datePicker = (DatePicker) datePickerDialogField.get(dpd);
-                    java.lang.reflect.Field[] datePickerFields = datePickerDialogField.getType().getDeclaredFields();
-                    for (java.lang.reflect.Field datePickerField : datePickerFields) {
-                        Log.i("test", datePickerField.getName());
-                        if ("mDaySpinner".equals(datePickerField.getName())) {
-                            datePickerField.setAccessible(true);
-                            Object dayPicker = datePickerField.get(datePicker);
-                            ((View) dayPicker).setVisibility(View.GONE);
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception ex) {
-            Log.e("DatePicker", ex.toString());
-        }
-        return dpd;
     }
 }
