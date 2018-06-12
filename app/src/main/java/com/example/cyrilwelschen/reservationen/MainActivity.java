@@ -1,11 +1,15 @@
 package com.example.cyrilwelschen.reservationen;
 
 import android.app.DatePickerDialog;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Point;
 import android.icu.util.Calendar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -18,8 +22,9 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private  DisplayManager displayManager;
+    public DisplayManager displayManager;
     private DbDownloadManager dbManager;
+    private BroadcastReceiver messageReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         //setSupportActionBar(myToolbar);
 
         // window size in pixel
-        Display display = getWindowManager().getDefaultDisplay();
+        final Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
@@ -46,6 +51,32 @@ public class MainActivity extends AppCompatActivity {
 
         dbManager = new DbDownloadManager(this);
         dbManager.downloadData();
+
+        messageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                    displayManager.displayReservations();
+                    displayManager.scrollToToday();
+                }
+            }
+        };
+
+        this.registerReceiver(messageReceiver, new IntentFilter("android.intent.action.DOWNLOAD_COMPLETE"));
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.registerReceiver(messageReceiver, new IntentFilter("android.intent.action.DOWNLOAD_COMPLETE"));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.unregisterReceiver(messageReceiver);
     }
 
     @Override
