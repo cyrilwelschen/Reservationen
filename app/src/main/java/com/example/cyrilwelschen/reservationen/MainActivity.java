@@ -1,13 +1,16 @@
 package com.example.cyrilwelschen.reservationen;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.icu.util.Calendar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,13 +28,12 @@ public class MainActivity extends AppCompatActivity {
     public DisplayManager displayManager;
     private DbDownloadManager dbManager;
     private BroadcastReceiver messageReceiver;
+    private boolean receiverRegistered = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Toolbar myToolbar = findViewById(R.id.my_toolbar);
-        //setSupportActionBar(myToolbar);
 
         // window size in pixel
         final Display display = getWindowManager().getDefaultDisplay();
@@ -43,27 +45,36 @@ public class MainActivity extends AppCompatActivity {
         // todo: change subtitle to actual version of database
         MainActivity.this.getSupportActionBar().setSubtitle("Stand: 12.06.18 00:12");
 
-        // Setup DisplayManager
-        displayManager = new DisplayManager(width, height, this, MainActivity.this);
-        displayManager.deviceSetup();
-        displayManager.displayReservations();
-        displayManager.scrollToToday();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            // todo: bug-fix when permission is granted for first time would have to restart app so see something....
+        } else {
+            //Toolbar myToolbar = findViewById(R.id.my_toolbar);
+            //setSupportActionBar(myToolbar);
 
-        dbManager = new DbDownloadManager(this);
-        dbManager.downloadData();
+            // Setup DisplayManager
+            dbManager = new DbDownloadManager(this);
+            displayManager = new DisplayManager(width, height, this, MainActivity.this);
+            displayManager.deviceSetup();
+            displayManager.displayReservations();
+            displayManager.scrollToToday();
 
-        messageReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String action = intent.getAction();
-                if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
-                    displayManager.displayReservations();
-                    displayManager.scrollToToday();
+            dbManager.downloadData();
+
+            messageReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    String action = intent.getAction();
+                    if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                        displayManager.displayReservations();
+                        displayManager.scrollToToday();
+                    }
                 }
-            }
-        };
+            };
 
-        this.registerReceiver(messageReceiver, new IntentFilter("android.intent.action.DOWNLOAD_COMPLETE"));
+            this.registerReceiver(messageReceiver, new IntentFilter("android.intent.action.DOWNLOAD_COMPLETE"));
+            receiverRegistered = true;
+        }
 
     }
 
@@ -76,7 +87,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        this.unregisterReceiver(messageReceiver);
+        if (receiverRegistered) {
+            this.unregisterReceiver(messageReceiver);
+        }
     }
 
     @Override

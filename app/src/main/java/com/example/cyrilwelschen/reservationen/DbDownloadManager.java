@@ -24,19 +24,11 @@ class DbDownloadManager {
 
     DbDownloadManager(Activity _activity) {
         activity = _activity;
-        checkDiskPermission();
     }
 
     void downloadData(){
         downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/34h5r7nkapro2m2/version.info");
         downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/sot724lwd5sf1a7/gastrofull.db");
-    }
-
-    private void checkDiskPermission ()
-    {
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-        }
     }
 
     private void downloadFromDropBoxUrl(String url) {
