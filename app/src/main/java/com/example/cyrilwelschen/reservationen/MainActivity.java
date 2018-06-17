@@ -20,8 +20,6 @@ import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
-import java.util.Date;
-
 
 public class MainActivity extends AppCompatActivity {
 

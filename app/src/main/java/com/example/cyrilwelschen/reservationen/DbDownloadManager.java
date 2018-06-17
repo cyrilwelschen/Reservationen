@@ -1,14 +1,10 @@
 package com.example.cyrilwelschen.reservationen;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 
 import java.io.File;
 
@@ -28,7 +24,7 @@ class DbDownloadManager {
 
     void downloadData(){
         downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/34h5r7nkapro2m2/version.info");
-        downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/sot724lwd5sf1a7/gastrofull.db");
+        downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/ensu6eqe6x86q1a/gastrofull.db");
     }
 
     private void downloadFromDropBoxUrl(String url) {

@@ -8,7 +8,6 @@ package com.example.cyrilwelschen.reservationen;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import com.javahelps.externalsqliteimporter.ExternalSQLiteOpenHelper;
 
 import java.util.ArrayList;
