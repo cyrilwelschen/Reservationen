@@ -20,6 +20,8 @@ public class Reservation {
     public int id;
     int inDiff;
     int outDiff;
+    String inString;
+    String outString;
     String guestName;
     String toString;
     int roomNr;
@@ -28,6 +30,8 @@ public class Reservation {
         roomNr = roomNumberToInteger(roomNumber);
         inDiff = stringToDateDiff(checkIn);
         outDiff = stringToDateDiff(checkOut);
+        inString = checkIn;
+        outString = checkOut;
         guestName = guest;
         toString = reservationId + " " + guest + " " + roomNumber + " " + checkIn + " " + checkOut + " ";
     }

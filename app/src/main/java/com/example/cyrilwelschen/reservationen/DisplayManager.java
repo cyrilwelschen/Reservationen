@@ -1,7 +1,9 @@
 package com.example.cyrilwelschen.reservationen;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -123,7 +125,7 @@ public class DisplayManager implements ScrollViewListener{
                     PIXELS_PER_DAY*res.inDiff + PIXELS_PER_DAY/2 + 10 + PIXELS_PER_DAY*(NUMBER_OF_DAYS_IN_PAST+1),
                     PIXELS_PER_ROOM - 10,
                     PIXELS_PER_DAY*(res.outDiff- res.inDiff)-20,
-                     res.guestName);
+                     res);
         }
     }
 
@@ -193,21 +195,44 @@ public class DisplayManager implements ScrollViewListener{
         layout.addView(darkGrayView, counter - 1);
     }
 
-    private void createSingleReservationView(int top, int left, int height, int width, String label) {
+    private void createSingleReservationView(int top, int left, int height, int width, final Reservation res) {
         TextView mEventView = new TextView(context);
         RelativeLayout.LayoutParams lParam = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         lParam.topMargin = top * PIXELS_PER_ROOM;
         lParam.leftMargin = left;
         mEventView.setLayoutParams(lParam);
+        mEventView.hasOnClickListeners();
+        mEventView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                alertDialog.setTitle(res.guestName);
+                alertDialog.setMessage(displayReservationInfo(res));
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+                return true;
+            }
+        });
         mEventView.setPadding(0, 0, 0, 0);
         mEventView.setHeight(height);
         mEventView.setWidth(width);
         mEventView.setGravity(0x11);
         mEventView.setTextColor(Color.parseColor("#ffffff"));
-        mEventView.setText(label);
+        mEventView.setText(res.guestName);
         mEventView.setBackgroundResource(R.drawable.single_reservation_style);
         mLayout.addView(mEventView, eventIndex - 1);
+    }
+
+    private String displayReservationInfo(Reservation res) {
+        return "Zimmer: \t"+res.roomNr+"\n"
+                +"Anreise: \t"+res.inString+"\n"
+                +"Abreise: \t"+res.outString;
     }
 
     private void roomGrid(RelativeLayout layout, int layoutCounter){
