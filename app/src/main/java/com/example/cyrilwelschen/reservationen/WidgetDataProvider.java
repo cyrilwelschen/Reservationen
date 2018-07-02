@@ -45,9 +45,9 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
 
     @Override
     public RemoteViews getViewAt(int position) {
-        RemoteViews view = new RemoteViews(mContext.getPackageName(),
-                android.R.layout.simple_list_item_1);
+        RemoteViews view = new RemoteViews(mContext.getPackageName(), android.R.layout.simple_list_item_1);
         view.setTextViewText(android.R.id.text1, mCollection.get(position));
+        view.setViewPadding(android.R.id.text1,10*position,0,0,0);
         return view;
     }
 
@@ -75,8 +75,7 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
         mCollection.clear();
         for (int i = 1; i <= 20; i++) {
             mCollection.add("Raum Number " + i);
-        };
-        mCollection.add("Very long line aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        }
     }
 
 }
