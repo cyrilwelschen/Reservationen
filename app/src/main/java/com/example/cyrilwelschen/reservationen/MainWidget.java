@@ -35,22 +35,14 @@ public class MainWidget extends AppWidgetProvider {
         //setRemoteAdapter(context, views);
         views.setRemoteAdapter(R.id.widget_list, new Intent(context, WidgetService.class));
 
-        //views.setViewVisibility(R.id.textView6, View.INVISIBLE);
-        //views.setTextViewText(R.id.textView8, "cyril");
-
-        /*
-        for(int i = 0; i < 8; i++) {
-            RemoteViews textView = new RemoteViews(context.getPackageName(), R.layout.widget_text_view_template);
-            textView.setTextViewText(R.id.textView1, "TextView number " + String.valueOf(i));
-            textView.setViewPadding(R.id.textView1, 0, 0, 0, 0);
-            //views.addView(R.id.widget_relative_layout, textView);
-            views.addView(R.id.widget_linear_layout, textView);
-        }
-        RemoteViews textView = new RemoteViews(context.getPackageName(), R.layout.widget_text_view_template);
-        textView.setTextViewText(R.id.textView1, "TextView number X");
-        textView.setViewPadding(R.id.textView1, 0, 100, 0, 0);
-        views.addView(R.id.widget_relative_layout, textView);
-        */
+        views.setViewVisibility(R.id.r30036, View.VISIBLE);
+        views.setTextViewText(R.id.r30036, "test1");
+        views.setViewVisibility(R.id.r30013, View.VISIBLE);
+        views.setTextViewText(R.id.r30013, "test1");
+        views.setViewVisibility(R.id.r30214, View.VISIBLE);
+        views.setTextViewText(R.id.r30214, "test2");
+        views.setViewVisibility(R.id.r30806, View.VISIBLE);
+        views.setTextViewText(R.id.r30806, "test2");
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
