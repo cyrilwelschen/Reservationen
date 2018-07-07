@@ -50,16 +50,23 @@ public class MainWidget extends AppWidgetProvider {
     }
 
     void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_main);
+
+        // todo: update widget when clicking sync statement
+        /*
+        Intent intentSync = new Intent(context, MainWidget.class);
+        intentSync.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE); //You need to specify the action for the intent. Right now that intent is doing nothing for there is no action to be broadcasted.
+        PendingIntent pendingSync = PendingIntent.getBroadcast(context,0, intentSync, PendingIntent.FLAG_UPDATE_CURRENT); //You need to specify a proper flag for the intent. Or else the intent will become deleted.
+        views.setOnClickPendingIntent(R.id.syncTextView, pendingSync);
+        */
+
 
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_main);
         views.setOnClickPendingIntent(R.id.relative_layout, pendingIntent);
 
         setDates(views);
-        Calendar now = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("ccc dd.MM HH:mm:ss");
-        views.setTextViewText(R.id.syncTextView, "Sync: "+sdf.format(now));
+        views.setTextViewText(R.id.syncTextView, "Sync: "+FileHelper.ReadFile("/ReservationenApp/upload_stamp.txt"));
         drawView(context, views);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);

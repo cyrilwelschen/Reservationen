@@ -41,18 +41,18 @@ public class MainActivity extends AppCompatActivity {
         int height = size.y;
 
         // todo: change subtitle to actual version of database
-        MainActivity.this.getSupportActionBar().setSubtitle("Stand: 12.06.18 00:12");
+        MainActivity.this.getSupportActionBar().setSubtitle("Stand: ");
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             // todo: bug-fix when permission is granted for first time would have to restart app to see something....
-            // todo: check full re-install for working.
         } else {
             //Toolbar myToolbar = findViewById(R.id.my_toolbar);
             //setSupportActionBar(myToolbar);
 
             // Setup DisplayManager
             dbManager = new DbDownloadManager(this);
+            MainActivity.this.getSupportActionBar().setSubtitle("Stand: "+dbManager.dbTimeStampRemote());
             displayManager = new DisplayManager(width, height, this, MainActivity.this);
             displayManager.deviceSetup();
             displayManager.displayReservations();

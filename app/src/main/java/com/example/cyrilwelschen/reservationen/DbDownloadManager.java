@@ -3,6 +3,7 @@ package com.example.cyrilwelschen.reservationen;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Environment;
 
@@ -22,7 +23,12 @@ class DbDownloadManager {
         activity = _activity;
     }
 
+    String dbTimeStampRemote() {
+        return FileHelper.ReadFile("/ReservationenApp/upload_stamp.txt");
+    }
+
     void downloadData(){
+        downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/723yk7nzlpr88vt/upload_stamp.txt");
         downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/34h5r7nkapro2m2/version.info");
         downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/ensu6eqe6x86q1a/gastrofull.db");
     }
