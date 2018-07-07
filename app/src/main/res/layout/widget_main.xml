@@ -22,18 +22,27 @@
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
             android:src="@mipmap/ic_launcher"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/widget_header"
-            android:layout_gravity="center_vertical"
-            android:textColor="@android:color/black"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:paddingStart="8dp"
-            android:paddingLeft="8dp"
-            android:paddingEnd="8dp"
-            android:paddingRight="8dp"/>
-    </LinearLayout>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:paddingEnd="8dp"
+			android:paddingLeft="8dp"
+			android:paddingRight="8dp"
+			android:paddingStart="8dp"
+			android:text="@string/widget_header"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="@android:color/black" />
+
+		<TextView
+			android:id="@+id/syncTextView"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+            android:gravity="right"
+			android:text="Sync" />
+	</LinearLayout>
     <!-- start new -->
     <!--
     <LinearLayout

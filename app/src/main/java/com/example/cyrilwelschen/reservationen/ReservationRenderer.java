@@ -30,12 +30,10 @@ class ReservationRenderer {
     }
 
     private List<Reservation> getReservations() {
-        Log.d("db reading", "start call of function getReservations");
         DatabaseAccess databaseAccess;
         // Check the external database file. External database must be available for the first time deployment.
         String externalDirectory = Environment.getExternalStoragePublicDirectory("ReservationenApp").getAbsolutePath();
         File dbFile = new File(externalDirectory, DatabaseOpenHelper.DATABASE_NAME);
-        Log.d("db reading", "external dir path: " + dbFile.toString());
         if (!dbFile.exists()) {
             List<Reservation> returnListFail = new ArrayList<>();
             Log.d("db reading", "------- DIDN'T FIND DB ---------");

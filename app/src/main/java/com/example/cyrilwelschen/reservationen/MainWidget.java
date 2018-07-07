@@ -57,6 +57,9 @@ public class MainWidget extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.relative_layout, pendingIntent);
 
         setDates(views);
+        Calendar now = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("ccc dd.MM HH:mm:ss");
+        views.setTextViewText(R.id.syncTextView, "Sync: "+sdf.format(now));
         drawView(context, views);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -68,8 +71,6 @@ public class MainWidget extends AppWidgetProvider {
         String name;
         for (Reservation res : reservations) {
             name = res.guestName;
-
-            Log.d("to Widget", "-----------"+res.roomNr+" "+res.inString+res.guestName+res.outString);
 
             // insert here
             if (res.inDiff <= -4 && res.outDiff == -3) {
