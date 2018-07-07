@@ -84,7 +84,6 @@ class DatabaseAccess {
         List<Reservation> allRes;
         allRes = getAllReservations();
         for (Reservation res : allRes) {
-            Log.d("Widget DB bdAccess", "-------------- found db --------------"+Integer.toString(res.inDiff)+" "+Integer.toString(res.outDiff)+" "+res.inString+" "+res.outString+" "+res.guestName);
             if (res.outDiff > -4 && res.inDiff < 2) {
                 returnRes.add(res);
             }
