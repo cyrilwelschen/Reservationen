@@ -24,6 +24,7 @@ class ReservationRenderer {
         activity = _activity;
     }
 
+
     List<Reservation> renderReservationListInRange(){
         return getReservations();
     }

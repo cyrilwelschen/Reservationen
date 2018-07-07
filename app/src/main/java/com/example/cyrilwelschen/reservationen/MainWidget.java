@@ -7,10 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import java.util.Date;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Created by cyril on 28.06.18.
@@ -18,7 +23,6 @@ import java.util.Date;
  */
 
 public class MainWidget extends AppWidgetProvider {
-
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -28,16 +32,6 @@ public class MainWidget extends AppWidgetProvider {
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
-
-    /*
-    private String intDiffToDateString(int intDayDiff){
-        Calendar todayCal = Calendar.getInstance();
-        todayCal.add(Calendar.DATE, intDayDiff);
-        SimpleDateFormat sdf1 = new SimpleDateFormat("dd.MMM");
-        SimpleDateFormat sdf2 = new SimpleDateFormat("cccc");
-        return sdf1.format(todayCal) + "\n" + sdf2.format(todayCal);
-    }
-    */
 
     private String intDiffToDateString(int intDayDiff){
         Calendar todayCal = Calendar.getInstance();
@@ -64,10 +58,8 @@ public class MainWidget extends AppWidgetProvider {
 
         setDates(views);
 
-        views.setViewVisibility(R.id.r30036, View.VISIBLE);
-        views.setTextViewText(R.id.r30036, "test1");
-        views.setViewVisibility(R.id.r30013, View.VISIBLE);
-        views.setTextViewText(R.id.r30013, "test1");
+        drawView(context, views);
+
         views.setViewVisibility(R.id.r30114, View.VISIBLE);
         views.setTextViewText(R.id.r30214, "test2");
         views.setViewVisibility(R.id.r30706, View.VISIBLE);
@@ -76,6 +68,51 @@ public class MainWidget extends AppWidgetProvider {
         views.setTextViewText(R.id.r30806, "you");
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
+    }
+
+    void drawView(Context context, RemoteViews views) {
+
+        List<Reservation> reservations = renderReservationListInRange(context);
+        String disp = null;
+        for (Reservation res : reservations) {
+            disp = res.guestName;
+            //Log.d("Widget DB", "-------------- found db --------------"+res.inString+" "+res.outString+" "+res.guestName);
+        }
+
+        views.setViewVisibility(R.id.r30013, View.VISIBLE);
+        views.setTextViewText(R.id.r30013, disp);
+    }
+
+    List<Reservation> renderReservationListInRange(Context context){
+        return getReservations(context);
+    }
+
+    private List<Reservation> getReservations(Context context) {
+        Log.d("Widget", "start call of function getReservations");
+        DatabaseAccess databaseAccess;
+        // Check the external database file. External database must be available for the first time deployment.
+        String externalDirectory = Environment.getExternalStoragePublicDirectory("ReservationenApp").getAbsolutePath();
+        File dbFile = new File(externalDirectory, DatabaseOpenHelper.DATABASE_NAME);
+        Log.d("Widget", "external dir path: " + dbFile.toString());
+        if (!dbFile.exists()) {
+            List<Reservation> returnListFail = new ArrayList<>();
+            Log.d("Widget", "------- DIDN'T FIND DB ---------");
+            return returnListFail;
+        } else {
+            Log.d("Widget", "------- Found DB from get Res ---------");
+        }
+        // If external database is available, deploy it
+        databaseAccess = DatabaseAccess.getInstance(context, externalDirectory);
+
+        databaseAccess.open();
+        List<Reservation> allReservations = databaseAccess.getReservationsInRange();
+        databaseAccess.close();
+        for (Reservation res : allReservations) {
+            Log.d("Widget DB call", "-------------- -------------"+Integer.toString(res.inDiff)+" "+Integer.toString(res.outDiff)+" "+res.inString+" "+res.outString+" "+res.guestName);
+        }
+        Log.d("Widget", "------- closed db ---------");
+
+        return allReservations;
     }
 
     @Override

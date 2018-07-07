@@ -8,6 +8,8 @@ package com.example.cyrilwelschen.reservationen;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
 import com.javahelps.externalsqliteimporter.ExternalSQLiteOpenHelper;
 
 import java.util.ArrayList;
@@ -75,5 +77,18 @@ class DatabaseAccess {
         }
         cursor.close();
         return allRes;
+    }
+
+    List<Reservation> getReservationsInRange() {
+        List<Reservation> returnRes = new ArrayList<>();
+        List<Reservation> allRes;
+        allRes = getAllReservations();
+        for (Reservation res : allRes) {
+            Log.d("Widget DB bdAccess", "-------------- found db --------------"+Integer.toString(res.inDiff)+" "+Integer.toString(res.outDiff)+" "+res.inString+" "+res.outString+" "+res.guestName);
+            if (res.outDiff > -4 && res.inDiff < 2) {
+                returnRes.add(res);
+            }
+        }
+        return returnRes;
     }
 }
