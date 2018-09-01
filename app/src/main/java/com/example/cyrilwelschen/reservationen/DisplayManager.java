@@ -49,7 +49,7 @@ public class DisplayManager implements ScrollViewListener{
     private RelativeLayout datesRowLayout;
 
     /// Display constants
-    private List<Integer> roomList = Arrays.asList(301, 302, 303, 304, 305, 307, 308, 309, 310, 311, 314, 315, 316, 317, 300, 320, 330, 340, 350);
+    private List<Integer> roomList = Arrays.asList(301, 302, 303, 304, 305, 307, 308, 309, 310, 311, 314, 315, 316, 317, 300, 320, 330, 340, 350, 400);
     private int NUMBER_OF_DAYS_IN_PAST = 400;
     private int PIXELS_PER_DAY = 100;
     private int PIXELS_PER_ROOM = 100;

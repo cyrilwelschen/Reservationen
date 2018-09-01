@@ -28,9 +28,12 @@ class DbDownloadManager {
     }
 
     void downloadData(){
-        downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/723yk7nzlpr88vt/upload_stamp.txt");
-        downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/34h5r7nkapro2m2/version.info");
-        downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/ensu6eqe6x86q1a/gastrofull.db");
+        downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/c3h4chn9vux8ftd/upload_stamp.txt");
+        // https://www.dropbox.com/s/c3h4chn9vux8ftd/upload_stamp.txt?dl=0
+        downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/weadj9ki8szy2eo/version.info");
+        // https://www.dropbox.com/s/weadj9ki8szy2eo/version.info?dl=0
+        downloadFromDropBoxUrl("https://dl.dropboxusercontent.com/s/gnrtk332t0trwri/gastrofull.db");
+        // https://www.dropbox.com/s/gnrtk332t0trwri/gastrofull.db?dl=0
     }
 
     private void downloadFromDropBoxUrl(String url) {
